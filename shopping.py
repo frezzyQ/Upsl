@@ -18,6 +18,22 @@ age_filter = st.sidebar.slider("Wiek klienta", int(data["Age"].min()), int(data[
 category_filter = st.sidebar.multiselect("Kategorie produktów", data["Category"].unique(), data["Category"].unique())
 
 # Filtruj dane
+filtered_data = data[
+    (data["Age"] >= age_filter[0]) & 
+    (data["Age"] <= age_filter[1]) & 
+    (data["Category"].isin(category_filter)) & 
+    (data["Review Rating"] >= min_review_rating) &  # Filtracja według minimalnej oceny recenzji
+    (data["Season"].isin(season_filter)) &          # Filtracja według sezonu
+    (data["Payment Method"].isin(payment_method_filter)) &  # Filtracja według metody płatności
+    (data["Previous Purchases"] > min_previous_purchases) &  # Minimalna liczba wcześniejszych zakupów
+    (data["Subscription Status"] == "Yes") &        # Klienci z aktywną subskrypcją
+    (data["Discount Applied"] == "Yes")             # Filtracja na podstawie wykorzystania rabatu
+]
+
+# Unikalne propozycje:
+# 1. Filtracja po ulubionej metodzie płatności:
+filtered_data = filtered_data[
+    filtered_data["Preferred Payment Method"].isin(preferred_payment_methods)# Filtruj dane
 filtered_data = data[(data["Age"] >= age_filter[0]) & 
                      (data["Age"] <= age_filter[1]) & 
                      (data["Category"].isin(category_filter))]
