@@ -1,6 +1,12 @@
+# Dodano bibliotekę Seaborn do zaawansowanych i estetycznych wykresów.
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Ustawienia globalne Seaborn
+sns.set_theme(style="whitegrid")
 
 # Wczytaj dane
 @st.cache
@@ -45,66 +51,66 @@ st.write("## Analiza wizualna")
 # Wykres 1: Zakupy wg kategorii
 st.write("### Liczba zakupów wg kategorii")
 category_counts = filtered_data["Category"].value_counts()
-fig, ax = plt.subplots()
-category_counts.plot(kind="bar", ax=ax)
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.barplot(x=category_counts.index, y=category_counts.values, ax=ax, palette="viridis")
 ax.set_xlabel("Kategoria")
 ax.set_ylabel("Liczba zakupów")
+ax.set_title("Liczba zakupów wg kategorii")
 st.pyplot(fig)
 
 # Wykres 2: Średnia kwota zakupów wg sezonu
 st.write("### Średnia kwota zakupów wg sezonu")
 season_mean = filtered_data.groupby("Season")["Purchase Amount (USD)"].mean()
-fig, ax = plt.subplots()
-season_mean.plot(kind="bar", ax=ax)
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.barplot(x=season_mean.index, y=season_mean.values, ax=ax, palette="coolwarm")
 ax.set_xlabel("Sezon")
 ax.set_ylabel("Średnia kwota zakupów (USD)")
+ax.set_title("Średnia kwota zakupów wg sezonu")
 st.pyplot(fig)
 
 # Wykres 3: Rozkład wieku klientów
 st.write("### Liczba klientów wg wieku")
-fig, ax = plt.subplots()
-filtered_data["Age"].hist(bins=20, ax=ax)
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.histplot(filtered_data["Age"], kde=True, bins=20, ax=ax, color="purple", edgecolor="black")
 ax.set_xlabel("Wiek")
 ax.set_ylabel("Liczba klientów")
+ax.set_title("Rozkład wieku klientów")
 st.pyplot(fig)
 
 # Wykres 4: Procentowy udział metod płatności
 st.write("### Procentowy udział metod płatności")
 payment_counts = filtered_data["Payment Method"].value_counts(normalize=True) * 100
-fig, ax = plt.subplots()
-payment_counts.plot(kind="pie", autopct='%1.1f%%', ax=ax, startangle=90)
-ax.set_ylabel("")
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.barplot(x=payment_counts.index, y=payment_counts.values, ax=ax, palette="pastel")
+ax.set_xlabel("Metoda płatności")
+ax.set_ylabel("Procentowy udział (%)")
+ax.set_title("Procentowy udział metod płatności")
 st.pyplot(fig)
 
 # Wykres 5: Rozkład ocen recenzji
 st.write("### Rozkład ocen recenzji")
 fig, ax = plt.subplots(figsize=(8, 5))
-filtered_data["Review Rating"].hist(
-    bins=8,  # Mniej binów dla lepszej czytelności
-    ax=ax, 
-    color="orange", 
-    edgecolor="black"
-)
+sns.boxplot(x="Review Rating", data=filtered_data, ax=ax, color="orange")
 ax.set_xlabel("Ocena recenzji")
-ax.set_ylabel("Liczba zakupów")
 ax.set_title("Rozkład ocen recenzji")
-ax.grid(axis="y", linestyle="--", alpha=0.7)  # Dodanie siatki dla osi Y
 st.pyplot(fig)
 
 # Wykres 6: Top lokalizacje wg średnich wydatków
 st.write("### Top 5 lokalizacji wg średnich wydatków")
 location_mean = filtered_data.groupby("Location")["Purchase Amount (USD)"].mean().nlargest(5)
-fig, ax = plt.subplots()
-location_mean.plot(kind="bar", ax=ax, color="green")
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.barplot(x=location_mean.index, y=location_mean.values, ax=ax, palette="cool")
 ax.set_xlabel("Lokalizacja")
 ax.set_ylabel("Średnia kwota zakupów (USD)")
+ax.set_title("Top 5 lokalizacji wg średnich wydatków")
 st.pyplot(fig)
 
 # Wykres 7: Liczba zakupów w różnych sezonach
 st.write("### Liczba zakupów w sezonach")
 season_counts = filtered_data["Season"].value_counts()
-fig, ax = plt.subplots()
-season_counts.plot(kind="bar", ax=ax, color="purple")
+fig, ax = plt.subplots(figsize=(8, 5))
+sns.barplot(x=season_counts.index, y=season_counts.values, ax=ax, palette="Set2")
 ax.set_xlabel("Sezon")
 ax.set_ylabel("Liczba zakupów")
+ax.set_title("Liczba zakupów w sezonach")
 st.pyplot(fig)
