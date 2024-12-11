@@ -56,6 +56,7 @@ sns.barplot(x=category_counts.index, y=category_counts.values, ax=ax, palette="v
 ax.set_xlabel("Kategoria")
 ax.set_ylabel("Liczba zakupów")
 ax.set_title("Liczba zakupów wg kategorii")
+sns.despine()
 st.pyplot(fig)
 
 # Wykres 2: Średnia kwota zakupów wg sezonu
@@ -66,6 +67,7 @@ sns.barplot(x=season_mean.index, y=season_mean.values, ax=ax, palette="coolwarm"
 ax.set_xlabel("Sezon")
 ax.set_ylabel("Średnia kwota zakupów (USD)")
 ax.set_title("Średnia kwota zakupów wg sezonu")
+sns.despine()
 st.pyplot(fig)
 
 # Wykres 3: Rozkład wieku klientów
@@ -75,6 +77,7 @@ sns.histplot(filtered_data["Age"], kde=True, bins=20, ax=ax, color="purple", edg
 ax.set_xlabel("Wiek")
 ax.set_ylabel("Liczba klientów")
 ax.set_title("Rozkład wieku klientów")
+sns.despine()
 st.pyplot(fig)
 
 # Wykres 4: Procentowy udział metod płatności
@@ -85,14 +88,17 @@ sns.barplot(x=payment_counts.index, y=payment_counts.values, ax=ax, palette="pas
 ax.set_xlabel("Metoda płatności")
 ax.set_ylabel("Procentowy udział (%)")
 ax.set_title("Procentowy udział metod płatności")
+sns.despine()
 st.pyplot(fig)
 
 # Wykres 5: Rozkład ocen recenzji
-st.write("### Rozkład ocen recenzji")
+st.write("### Rozkład ocen recenzji wg kategorii")
 fig, ax = plt.subplots(figsize=(8, 5))
-sns.boxplot(x="Review Rating", data=filtered_data, ax=ax, color="orange")
+sns.kdeplot(data=filtered_data, x="Review Rating", hue="Category", fill=True, palette="muted", ax=ax, alpha=0.5)
 ax.set_xlabel("Ocena recenzji")
-ax.set_title("Rozkład ocen recenzji")
+ax.set_ylabel("Gęstość")
+ax.set_title("Rozkład ocen recenzji wg kategorii")
+sns.despine()
 st.pyplot(fig)
 
 # Wykres 6: Top lokalizacje wg średnich wydatków
@@ -103,6 +109,7 @@ sns.barplot(x=location_mean.index, y=location_mean.values, ax=ax, palette="cool"
 ax.set_xlabel("Lokalizacja")
 ax.set_ylabel("Średnia kwota zakupów (USD)")
 ax.set_title("Top 5 lokalizacji wg średnich wydatków")
+sns.despine()
 st.pyplot(fig)
 
 # Wykres 7: Liczba zakupów w różnych sezonach
@@ -113,4 +120,5 @@ sns.barplot(x=season_counts.index, y=season_counts.values, ax=ax, palette="Set2"
 ax.set_xlabel("Sezon")
 ax.set_ylabel("Liczba zakupów")
 ax.set_title("Liczba zakupów w sezonach")
+sns.despine()
 st.pyplot(fig)
