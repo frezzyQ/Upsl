@@ -68,7 +68,6 @@ ax.set_xlabel("Wiek")
 ax.set_ylabel("Liczba klientów")
 st.pyplot(fig)
 
-# Dodatkowe wykresy:
 # Wykres 4: Procentowy udział metod płatności
 st.write("### Procentowy udział metod płatności")
 payment_counts = filtered_data["Payment Method"].value_counts(normalize=True) * 100
@@ -79,10 +78,17 @@ st.pyplot(fig)
 
 # Wykres 5: Rozkład ocen recenzji
 st.write("### Rozkład ocen recenzji")
-fig, ax = plt.subplots()
-filtered_data["Review Rating"].hist(bins=10, ax=ax, color="orange")
+fig, ax = plt.subplots(figsize=(8, 5))
+filtered_data["Review Rating"].hist(
+    bins=8,  # Mniej binów dla lepszej czytelności
+    ax=ax, 
+    color="orange", 
+    edgecolor="black"
+)
 ax.set_xlabel("Ocena recenzji")
 ax.set_ylabel("Liczba zakupów")
+ax.set_title("Rozkład ocen recenzji")
+ax.grid(axis="y", linestyle="--", alpha=0.7)  # Dodanie siatki dla osi Y
 st.pyplot(fig)
 
 # Wykres 6: Top lokalizacje wg średnich wydatków
