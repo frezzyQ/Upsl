@@ -27,13 +27,13 @@ filtered_data = data[
     (data["Age"] >= age_filter[0]) & 
     (data["Age"] <= age_filter[1]) & 
     (data["Category"].isin(category_filter)) & 
-    (data["Review Rating"] >= min_review_rating) &  # Filtracja według minimalnej oceny recenzji
-    (data["Season"].isin(season_filter)) &          # Filtracja według sezonu
-    (data["Payment Method"].isin(payment_method_filter)) &  # Filtracja według metody płatności
-    (data["Previous Purchases"] > min_previous_purchases) &  # Minimalna liczba wcześniejszych zakupów
-    (data["Subscription Status"] == "Yes") &        # Klienci z aktywną subskrypcją
-    (data["Discount Applied"] == "Yes") &           # Filtracja na podstawie wykorzystania rabatu
-    (data["Preferred Payment Method"].isin(preferred_payment_methods))  # Ulubiona metoda płatności
+    (data["Review Rating"] >= min_review_rating) & 
+    (data["Season"].isin(season_filter)) & 
+    (data["Payment Method"].isin(payment_method_filter)) & 
+    (data["Previous Purchases"] > min_previous_purchases) & 
+    (data["Preferred Payment Method"].isin(preferred_payment_methods)) & 
+    (data["Subscription Status"] == "Yes") & 
+    (data["Discount Applied"] == "Yes")
 ]
 
 # Wyświetlanie danych
@@ -60,10 +60,45 @@ ax.set_xlabel("Sezon")
 ax.set_ylabel("Średnia kwota zakupów (USD)")
 st.pyplot(fig)
 
-# Wykres 3: Liczba klientów wg wieku
+# Wykres 3: Rozkład wieku klientów
 st.write("### Liczba klientów wg wieku")
 fig, ax = plt.subplots()
 filtered_data["Age"].hist(bins=20, ax=ax)
 ax.set_xlabel("Wiek")
 ax.set_ylabel("Liczba klientów")
+st.pyplot(fig)
+
+# Dodatkowe wykresy:
+# Wykres 4: Procentowy udział metod płatności
+st.write("### Procentowy udział metod płatności")
+payment_counts = filtered_data["Payment Method"].value_counts(normalize=True) * 100
+fig, ax = plt.subplots()
+payment_counts.plot(kind="pie", autopct='%1.1f%%', ax=ax, startangle=90)
+ax.set_ylabel("")
+st.pyplot(fig)
+
+# Wykres 5: Rozkład ocen recenzji
+st.write("### Rozkład ocen recenzji")
+fig, ax = plt.subplots()
+filtered_data["Review Rating"].hist(bins=10, ax=ax, color="orange")
+ax.set_xlabel("Ocena recenzji")
+ax.set_ylabel("Liczba zakupów")
+st.pyplot(fig)
+
+# Wykres 6: Top lokalizacje wg średnich wydatków
+st.write("### Top 5 lokalizacji wg średnich wydatków")
+location_mean = filtered_data.groupby("Location")["Purchase Amount (USD)"].mean().nlargest(5)
+fig, ax = plt.subplots()
+location_mean.plot(kind="bar", ax=ax, color="green")
+ax.set_xlabel("Lokalizacja")
+ax.set_ylabel("Średnia kwota zakupów (USD)")
+st.pyplot(fig)
+
+# Wykres 7: Liczba zakupów w różnych sezonach
+st.write("### Liczba zakupów w sezonach")
+season_counts = filtered_data["Season"].value_counts()
+fig, ax = plt.subplots()
+season_counts.plot(kind="bar", ax=ax, color="purple")
+ax.set_xlabel("Sezon")
+ax.set_ylabel("Liczba zakupów")
 st.pyplot(fig)
